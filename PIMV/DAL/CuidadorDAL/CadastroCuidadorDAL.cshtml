@@ -1,0 +1,36 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ 
+    if (IsPost)
+    {
+        var db = WebMatrix.Data.Database.Open("dbBancoPIM");
+
+        <!--Dados do Cuidador-->
+        string cpf = Request.Form["textCpf"];
+        string nome = Request.Form["textNome"];
+        DateTime dataNascimento = Request.Form["dtNascimento"].AsDateTime();
+        string sexo = Request.Form["opRadio"];
+        string endereco = Request.Form["textEndereco"];
+        string telefone1 = Request.Form["tel1"];
+        string telefone2 = Request.Form["tel2"];
+        string email = Request.Form["email"];
+        decimal idTurma = Request.Form["sTurma"].AsDecimal();
+        decimal idSala = Request.Form["sSala"].AsDecimal();
+        DateTime dtAdmissao = DateTime.Now;
+
+
+        <!--Pesquisar sobre validação de formulario-->
+        db.Execute("INSERT INTO Cuidador (cpf, nome, endereco, sexo, telefone1, telefone2, email, dtNascimento, dtAdmissao, idTurma, idSala)" +
+            " VALUES(@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10)", cpf, nome, endereco, sexo, telefone1, telefone2, email, dataNascimento, dtAdmissao, idTurma, idSala);
+
+        db.Close();
+
+        <h1 class="text-success">Cadastro realizado com sucesso!</h1>
+        <hr />
+        <a href="~/Index.cshtml" class="btn btn-success">Voltar</a>
+        
+    }
+
+}

@@ -1,0 +1,91 @@
+CREATE DATABASE dbBancoPIM
+GO
+USE [dbBancoPIM]
+GO
+
+--Tabelas
+CREATE TABLE Crianca(
+idMatricula NUMERIC (4) IDENTITY PRIMARY KEY,
+nome VARCHAR (50),
+sexo VARCHAR (1),
+dtNascimento DATE,
+dtMatricula DATE,
+observacoes VARCHAR (100),
+idTurma NUMERIC (4),
+idSala NUMERIC (4),
+cpfResponsavel VARCHAR (14) 
+);
+
+CREATE TABLE HistoricoCrianca(
+idHistorico NUMERIC (4) IDENTITY PRIMARY KEY,
+dataAlteracao DATETIME,
+alteracao VARCHAR (60),
+idMatricula NUMERIC (4)
+);
+
+CREATE TABLE Responsavel(
+cpf varchar (14) PRIMARY KEY,
+nome VARCHAR (50),
+dataNascimento DATE,
+sexo VARCHAR(1),
+endereco VARCHAR (100),
+telefone1 VARCHAR (15),
+telefone2 VARCHAR (15),
+email VARCHAR (40)
+);
+
+CREATE TABLE Cuidador(
+cpf varchar (14) PRIMARY KEY,
+nome VARCHAR(50),
+endereco VARCHAR (60),
+sexo VARCHAR (9),
+telefone1 VARCHAR (15),
+telefone2 VARCHAR (15),
+email varchar (40),
+dtNascimento DATE,
+dtAdmissao DATE,
+idTurma NUMERIC (4),
+idSala NUMERIC (4)
+);
+
+CREATE TABLE Turma(
+idTurma NUMERIC (4) IDENTITY PRIMARY KEY,
+periodo VARCHAR (10),
+);
+
+CREATE TABLE Sala(
+idSala NUMERIC (4) IDENTITY PRIMARY KEY,
+nome VARCHAR (11),
+);
+
+--Definindo Chaves estrageiras
+GO
+ALTER TABLE Crianca
+ADD FOREIGN KEY (cpfResponsavel) REFERENCES Responsavel (cpf)
+GO
+ALTER TABLE Crianca
+ADD FOREIGN KEY (idTurma) REFERENCES Turma (idTurma)
+GO
+ALTER TABLE Crianca
+ADD FOREIGN KEY (idSala) REFERENCES Sala (idSala)
+GO
+ALTER TABLE Cuidador
+ADD FOREIGN KEY (idTurma) REFERENCES Turma (idTurma)
+GO
+ALTER TABLE Cuidador
+ADD FOREIGN KEY (idSala) REFERENCES  Sala (idSala)
+GO
+ALTER TABLE HistoricoCrianca
+ADD FOREIGN KEY (idMatricula) REFERENCES Crianca (idMatricula)
+
+
+--Inserindo Turma
+INSERT INTO Turma (periodo) VALUES ('Matutino')
+INSERT INTO Turma (periodo) VALUES ('Vespertino')
+INSERT INTO Turma (periodo) VALUES ('Integral')
+
+--Inserindo Sala
+INSERT INTO Sala (nome) VALUES ('Berçario1')
+INSERT INTO Sala (nome) VALUES ('Berçario2')
+INSERT INTO Sala (nome) VALUES ('MiniGrupo1')
+INSERT INTO Sala (nome) VALUES ('MiniGrupo2')

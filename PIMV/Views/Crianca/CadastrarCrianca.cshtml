@@ -1,0 +1,121 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Conexao com banco-->
+@{ 
+    var db = WebMatrix.Data.Database.Open("dbBancoPIM");
+
+    var idResp = Request.QueryString["cpf"];
+    if (idResp == null)
+    {
+
+    }
+
+    var r = db.QuerySingle("SELECT*FROM Responsavel WHERE cpf = @0", idResp);
+
+
+
+    var sala = db.Query("SELECT*FROM Sala");
+    var turma = db.Query("SELECT*FROM Turma");
+
+    db.Close();
+}
+
+
+    <h3 class="text-primary">Matrícula da Criança</h3>
+    <hr />
+    <h4>Dados do Responsável</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th> CPF </th>
+                            <th> Nome </th>
+                            <th> Data de Nascimento </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@r.cpf</td>
+                            <td>@r.nome</td>
+                            <td>@r.dataNascimento</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<hr />
+    <!--Dados da Crianca-->
+<form method="post" action="~/DAL/CriancaDAL/CadastroCriancaDAL.cshtml">
+    <h4 class="text-info">Dados da Criança</h4>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="textCpf"></label>
+                <input type="hidden" name="textCpf" value="@idResp" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="textNome">Nome: </label>
+                <input type="text" name="textNome" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="dtNascimento">Data de Nascimento:</label>
+                <input type="date" name="dtNascimento" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="rSexo">Sexo:</label>
+                <p></p>
+                <label class="radio-inline"><input type="radio" value="M" name="opRadio">Masculino</label>
+                <label class="radio-inline"><input type="radio" value="F" name="opRadio">Feminino</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="sala">Sala:</label>
+                <select name="sSala" class="form-control">
+                    @foreach (var s in sala)
+                    {
+                        <option value="@s.idSala">@s.nome</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="turma">Turma:</label>
+                <select name="sTurma" class="form-control">
+                    @foreach (var t in turma)
+                    {
+                        <option value="@t.idTurma">@t.periodo</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="taObs">Observações:</label>
+                <textarea name="taObs" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+    <a href="~/Index.cshtml" class="btn btn-danger">Cancelar</a> | <button type="submit" class="btn btn-primary">Cadastrar</button>
+</form>

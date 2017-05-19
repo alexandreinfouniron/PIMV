@@ -1,0 +1,31 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ 
+    if (IsPost)
+    {
+        var db = WebMatrix.Data.Database.Open("dbBancoPIM");       
+
+        <!--Dados do Responsavel-->
+        string cpf = Request.Form["texCpf"];
+        string nome = Request.Form["textNome"];
+        DateTime dataNascimento = Request.Form["dtNascimento"].AsDateTime();
+        string sexo = Request.Form["opRadio"];
+        string endereco = Request.Form["textEndereco"];
+        string tel1 = Request.Form["tel1"];
+        string tel2 = Request.Form["tel2"];
+        string email = Request.Form["email"];
+
+        <!--Pesquisar sobre validação de formulario-->
+        db.Execute("INSERT INTO Responsavel (cpf, nome, dataNascimento, sexo, endereco, telefone1, telefone2, email) VALUES(@0, @1, @2, @3, @4, @5, @6, @7)", cpf, nome, dataNascimento, sexo, endereco, tel1, tel2, email);
+
+        db.Close();
+
+        <h1 class="text-success">Cadastro realizado com sucesso!</h1>
+        <hr />
+        <a href="~/Views/Crianca/CadastrarCrianca?cpf=@cpf" class="btn btn-success">Matricular Criança</a>
+        
+    }
+
+}

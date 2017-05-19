@@ -1,0 +1,23 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    if (IsPost)
+    {
+        var db = WebMatrix.Data.Database.Open("dbBancoPIM");
+
+        <!--Dados do Responsavel-->
+        string periodo = Request.Form["txtTurma"];
+
+        <!--Pesquisar sobre validação de formulario-->
+        db.Execute("INSERT INTO Turma (periodo) VALUES(@0)", periodo);
+
+        db.Close();
+
+        <h1 class="text-success">Cadastro realizado com sucesso!</h1>
+        <hr />
+        <a href="~/Index.cshtml" class="btn btn-success">Voltar</a>
+
+    }
+}
