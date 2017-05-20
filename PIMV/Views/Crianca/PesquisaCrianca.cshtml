@@ -49,7 +49,7 @@
                                         data-sexo="@c.sexo"
                                         data-dataNasc="@c.dtNasc"
                                         data-obs="@c.obs"
-                                        data-toggle="modal" data-target="#myModal" data-whatever="Editar">
+                                        data-toggle="modal" data-target="#myModal" >
                                     Editar
                                 </button>
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="Visualizar"> Visualizar</button>
@@ -155,23 +155,25 @@
 
             $('#myModal').on('shown.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
-                var idMat = button.data('idMat')
-                var dataMat = button.data('dataMat')
-                var nmResp = button.data('nmResp')
-                var nmCrianca = button.data('nmCrianca')
-                var dataNasc = button.data('dataNasc')
+                var idMat = button.data('idmat')
+                var dataMat = button.data('datamat')
+                var nmResp = button.data('nmresp')
+                var nmCrianca = button.data('nmcrianca')
+                var dataNasc = button.data('datanasc')
                 var opSexo = button.data('sexo')
                 var obs = button.data('obs')
 
-                ///console.log('idMat')
+                console.log('idMat', idMat)
 
                 var modal = $(this)
 
-                /// console.log(('.modal-body input[name=textIdMat]').val(idMat))
+                console.log(
+                    modal.find('.modal-body input[name=textIdMat]')
+                )
 
                 modal.find('.modal-body input[name=textIdMat]').val(idMat)
                 modal.find('.modal-body input[name=dataMat]').val(dataMat)
-                modal.find('.modal-body input[name=textNmResp]').val(nmResp)
+                modal.find('.modal-body input[name=nmResp]').val(nmResp)
                 modal.find('.modal-body input[name=textNmCrianca]').val(nmCrianca)
                 modal.find('.modal-body input[name=dataNasc]').val(dataNasc)
                 modal.find('.modal-body input[name=opSexo]').val(opSexo)
