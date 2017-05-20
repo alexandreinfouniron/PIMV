@@ -3,184 +3,109 @@
 }
 @{
     var db = WebMatrix.Data.Database.Open("dbBancoPIM");
-
     var crianca = db.Query(@"select c.idMatricula 'Matricula', c.dtNascimento 'dtNasc' , c.dtMatricula 'dtMatricula', r.nome 'nomeResp', c.nome 'nomeCrianca', s.nome 'nomeSala', t.periodo 'nomePeriodo', c.sexo 'sexo', c.Observacoes 'obs'
                              from Crianca c left join Responsavel r
                              on c.cpfResponsavel = r.cpf left join Sala s
                              on c.idSala = s.idSala left join Turma t
                              on c.idTurma = t.idTurma");
     db.Close();
+
+    if (IsPost)
+    { 
+        <!--Dados da Criança-->
+        string idMatricula = Request.Form["textMatricula"];
+        string cpfResponsavel = Request.Form["textCpf"];
+        string nome = Request.Form["textNomeCrianca"];
+        DateTime dtNascimento = Request.Form["dtNascimento"].AsDateTime();
+        DateTime dataMatricula = DateTime.Today;
+        string sexo = Request.Form["opRadio"];
+        string observacoes = Request.Form["taObs"];
+        decimal idTurma = Request.Form["sTurma"].AsDecimal();
+        decimal idSala = Request.Form["sSala"].AsDecimal();
+
+        <!--Pesquisar sobre validação de formulario-->
+        db.Execute(@"UPDATE Crianca SET nome=@0, sexo=@1, dtNascimento=@2, dtMatricula=@3, observacoes=@4, idTurma=@5, idSala=@6, cpfResponsavel=@7 WHERE idMatricula=@8", nome, sexo, dtNascimento, dataMatricula, observacoes, idTurma, idSala, cpfResponsavel, idMatricula);
+
+        Response.Redirect("~/Views/Crianca/PesquisaCrianca.cshtml");
+        db.Close();
+
+    }
 }
 
-
-<body>
+<h3 class="text-center">Crianças Cadastradas</h3>
+<p></p><br />
+<form method="post">
     <div class="row">
+        <div class="col-md-3">
+            <input type="text" name="txtBuscar" class="form-control" placeholder="Pesquisar" />
+        </div>
+        <div class="col-md-2">
+            <input type="submit" class="btn btn-primary" />
+        </div>
+    </div>
+    <p></p><br />
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Matrícula</th>
+            <th>Nome</th>
+            <th>Sala</th>
+            <th>Turma</th>
+            <th>Responsável</th>
+            <th class="text-center">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in crianca)
+            {
+            <tr>
+                <td>@c.Matricula</td>
+                <td>@c.nomeCrianca</td>
+                <td>@c.nomeSala</td>
+                <td>@c.nomePeriodo</td>
+                <td>@c.nomeResp</td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-success btnDetalhes text-center" data-value="@c.Matricula"><span class="glyphicon glyphicon glyphicon-list-alt"></span> Ficha</button>
+                    <button type="button" class="btn btn-sm btn-danger btn-excluir text-center" data-excluir="@c.Matricula"><span class="glyphicon glyphicon-trash"></span> Excluir</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-        <div class="col-md-1"></div>
-        <div class="col-md-11">
-            <h3 class="text-primary">Pesquisar Criança</h3>
-            <hr />
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th class="text-center">Matrícula</th>
-                        <th class="text-center">Nome</th>
-                        <th class="text-center">Sala</th>
-                        <th class="text-center">Turma</th>
-                        <th class="text-center">Responsável</th>
-                        <th class="text-center">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var c in crianca)
-                    {
-                        <tr class="text-center">
-                            <td>@c.Matricula</td>
-                            <td>@c.nomeCrianca</td>
-                            <td>@c.nomeSala</td>
-                            <td>@c.nomePeriodo</td>
-                            <td>@c.nomeResp</td>
-                            <td>
-                                <button type="button" class="btn btn-warning"
-                                        data-idMat="@c.Matricula"
-                                        data-dataMat="@c.dtMatricula"
-                                        data-nmResp="@c.nomeResp"
-                                        data-nmCrianca="@c.nomeCrianca"
-                                        data-sexo="@c.sexo"
-                                        data-dataNasc="@c.dtNasc"
-                                        data-obs="@c.obs"
-                                        data-toggle="modal" data-target="#myModal" >
-                                    Editar
-                                </button>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="Visualizar"> Visualizar</button>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-whatever="Excluir">Excluir</button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-            <!--Ficha crianca-->
-            <!-- Modal -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
-                            <h4 class="modal-title text-center" id="myModalLabel">Ficha da Criança
-                            </h4>
-                        </div>
-
-                        <div class="modal-body">
-                            <form method="post" action="">
-                                <div class="row">
-                                    <div class="col-md-5">
-
-                                        <div class="form-group">
-                                            <label for="txtMatricula"> Nº da Matrícula: </label>
-                                            <input type="text" name="textIdMat" class="form-control btn-block" readonly="readonly" />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2"></div>
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <label for="dtMatricula">Data da Matrícula:</label>
-                                            <input type="date" name="dataMat" class="form-control btn-block" readonly="readonly" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="textResp">Responsável:</label>
-                                            <input type="text" name="nmResp" class="form-control" readonly="readonly"/>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="textNome">Nome:</label>
-                                            <input type="text" name="nmCrianca" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <label for="dtNascimento">Data de Nascimento:</label>
-                                            <input type="text" name="dataNasc" class="form-control" />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2"></div>
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <label for="rSexo">Sexo:</label>
-                                            <p></p>
-                                            <!-- lembrar de marcar o sexo -->
-                                            <label class="radio-inline"><input type="radio" value="M" name="opSexo">Masculino</label>
-                                            <label class="radio-inline"><input type="radio" value="F" name="opSexo">Feminino</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="taObs">Observações:</label>
-                                            <textarea name="taObs" class="form-control" style="width:565px; height:200px"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-success">Salvar</button>
-                        </div>
+<!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="conteudoModal">
+                        <!--RenderModal-->
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-    @section Scripts {
-        <script>
 
-            $('#myModal').on('shown.bs.modal', function (event) {
-                var button = $(event.relatedTarget)
-                var idMat = button.data('idmat')
-                var dataMat = button.data('datamat')
-                var nmResp = button.data('nmresp')
-                var nmCrianca = button.data('nmcrianca')
-                var dataNasc = button.data('datanasc')
-                var opSexo = button.data('sexo')
-                var obs = button.data('obs')
-
-                console.log('idMat', idMat)
-
-                var modal = $(this)
-
-                console.log(
-                    modal.find('.modal-body input[name=textIdMat]')
-                )
-
-                modal.find('.modal-body input[name=textIdMat]').val(idMat)
-                modal.find('.modal-body input[name=dataMat]').val(dataMat)
-                modal.find('.modal-body input[name=nmResp]').val(nmResp)
-                modal.find('.modal-body input[name=textNmCrianca]').val(nmCrianca)
-                modal.find('.modal-body input[name=dataNasc]').val(dataNasc)
-                modal.find('.modal-body input[name=opSexo]').val(opSexo)
-                modal.find('.modal-body input[name=taObs]').val(obs)
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".btnDetalhes").click(function () {
+                var id = $(this).data("value");
+                $("#conteudoModal").load("/Views/Crianca/FichaCrianca.cshtml?matricula=" + id,
+                    function () {
+                        $('#myModal').modal('show')
+                    });
             });
 
-        </script>
-    }
-
-</body>
+            $(".btn-excluir").click(function () {
+                var id = $(this).data("excluir");
+                $("#conteudoModal").load("/Views/Crianca/DeleteCrianca.cshtml?matricula=" + id,
+                    function () {
+                        $('#myModal').modal('show')
+                    });
+            });
+        });
+    </script>
+}
