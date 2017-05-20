@@ -1,0 +1,12 @@
+﻿<!--Conexao com banco-->
+@{
+    int idMatricula = Request.QueryString["matricula"].AsInt();
+}
+
+<form method="post" action="~/DAL/CriancaDAL/DeleteCriancaDAL.cshtml">
+    <input type="hidden" value="@idMatricula" name="textMatricula" />
+    <h4>Deseja realmente excluir?</h4>
+    <p></p><br />
+    <button type="button" class="btn btn-lg btn-success" data-dismiss="modal">Não</button> | <input type="submit" class="btn btn-lg btn-danger" value="SIM" />
+    
+</form>
