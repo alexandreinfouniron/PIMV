@@ -3,7 +3,7 @@
 }
 
 @{ 
-    if (IsPost)
+    if (IsPost && Validation.IsValid())
     {
         var db = WebMatrix.Data.Database.Open("dbBancoPIM");
 
@@ -17,7 +17,6 @@
         decimal idTurma = Request.Form["sTurma"].AsDecimal();
         decimal idSala = Request.Form["sSala"].AsDecimal();
        
-        <!--Pesquisar sobre validação de formulario-->
         db.Execute("INSERT INTO Crianca (nome, sexo, dtNascimento, dtMatricula, observacoes, idTurma, idSala, cpfResponsavel) VALUES(@0, @1, @2, @3, @4, @5, @6, @7)", nome, sexo, dataNascimento, dataMatricula, observacoes, idTurma, idSala, cpfResponsavel);
 
         db.Close();
