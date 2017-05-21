@@ -1,9 +1,10 @@
 ﻿@{
+    Validation.RequireField("txtSala", "CAMPO OBRIGATÓRIO!");
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
-    if (IsPost)
+    if (IsPost && Validation.IsValid())
     {
         var db = WebMatrix.Data.Database.Open("dbBancoPIM");
 
@@ -19,5 +20,24 @@
         <hr />
         <a href="~/Index.cshtml" class="btn btn-success">Voltar</a>
 
+    }
+    else
+    {
+        <form method="post" action="">
+
+            <h3 class="text-primary">Cadastro da Sala</h3>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="txtSala"> Sala: </label>
+                        <input type="text" name="txtSala" class="form-control" />
+                        @Html.ValidationMessage("txtSala")
+                    </div>
+                </div>
+            </div>
+            <a href="~/Index.cshtml" class="btn btn-danger">Cancelar</a> | <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </form>
     }
 }
