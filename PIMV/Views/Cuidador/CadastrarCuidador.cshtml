@@ -12,9 +12,6 @@
     db.Close();
 }
 
-
-
-
 <form method="post" action="~/DAL/CuidadorDAL/CadastroCuidadorDAL.cshtml">
     <h3 class="text-primary">Cadastro do Cuidador</h3>
     <hr />
@@ -25,6 +22,7 @@
             <div class="form-group">
                 <label for="textCpf">CPF: </label>
                 <input type="text" name="textCpf" class="form-control" />
+                @Html.ValidationMessage("textCpf")
             </div>
         </div>
     </div>
@@ -64,7 +62,7 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label for="tel">Telefone 1: </label>
-                <input type="tel" name="tel" id="tel" class="form-control" />
+                <input type="tel" name="tel1" id="tel" class="form-control" />
             </div>
         </div>
         <div class="col-md-3">
