@@ -1,10 +1,10 @@
 ﻿@{
-    Validation.RequireField("textCpf", "Campo Obrigatório! Por favor, informe o CPF");
-    Validation.RequireField("textNome", "Campo Obrigatório! Por favor, informe o NOME");
-    Validation.RequireField("dtNascimento", "Campo Obrigatório! Por favor, informe a DATA DE NASCIMENTO");
-    Validation.RequireField("opRadio", "Campo Obrigatório! Por favor, informe o SEXO");
-    Validation.RequireField("textEndereco", "Campo Obrigatório! Por favor, informe o ENDEREÇO");
-    Validation.RequireField("tel1", "Campo Obrigatório! Por favor, informe um TELEFONE");
+    Validation.RequireField("textCpf", "Campo Obrigatório!");
+    Validation.RequireField("textNome", "Campo Obrigatório!");
+    Validation.RequireField("dtNascimento", "Campo Obrigatório!");
+    Validation.RequireField("opRadio", "Campo Obrigatório!");
+    Validation.RequireField("textEndereco", "Campo Obrigatório!");
+    Validation.RequireField("tel1", "Campo Obrigatório!");
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -73,9 +73,8 @@
                         <label for="rSexo">Sexo:</label>
                         <p></p>
                         <label class="radio-inline"><input type="radio" value="M" name="opRadio">Masculino</label>
-                        <label class="radio-inline"><input type="radio" value="F" name="opRadio">Feminino</label>
-                        @Html.ValidationMessage("opRadio")
-                    </div>
+                        <label class="radio-inline"><input type="radio" value="F" name="opRadio">Feminino</label><br />                        @Html.ValidationMessage("opRadio")
+                    </div>                   
                 </div>
             </div>
             <div class="row">
