@@ -1,26 +1,7 @@
 ﻿@{
-    Validation.RequireField("textNome", "CAMPO OBRIGATÓRIO!");
-    Validation.RequireField("dtNascimento", "CAMPO OBRIGATÓRIO!");
-    Validation.RequireField("opRadio", "CAMPO OBRIGATÓRIO!");
-    Validation.RequireField("sSala", "CAMPO OBRIGATÓRIO!");
-    Validation.RequireField("sTurma", "CAMPO OBRIGATÓRIO!");
-
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-<!--Conexao com banco-->
-@{
     var db = WebMatrix.Data.Database.Open("dbBancoPIM");
-
-    var idResp = Request.QueryString["cpf"];
-    if (idResp == null)
-    {
-
-    }
-
-    var r = db.QuerySingle("SELECT*FROM Responsavel WHERE cpf = @0", idResp);
-
-
 
     var sala = db.Query("SELECT*FROM Sala");
     var turma = db.Query("SELECT*FROM Turma");
@@ -28,67 +9,39 @@
     db.Close();
 }
 
-@{
-    if (IsPost && Validation.IsValid())
-    {
-        var dbV = WebMatrix.Data.Database.Open("dbBancoPIM");
-
-        <!--Dados da Criança-->
-        string cpfResponsavel = Request.Form["textCpf"];
-        string nome = Request.Form["textNome"];
-        DateTime dataNascimento = Request.Form["dtNascimento"].AsDateTime();
-        DateTime dataMatricula = DateTime.Today;
-        string sexo = Request.Form["opRadio"];
-        string observacoes = Request.Form["taObs"];
-        decimal idTurma = Request.Form["sTurma"].AsDecimal();
-        decimal idSala = Request.Form["sSala"].AsDecimal();
-
-        dbV.Execute("INSERT INTO Crianca (nome, sexo, dtNascimento, dtMatricula, observacoes, idTurma, idSala, cpfResponsavel) VALUES(@0, @1, @2, @3, @4, @5, @6, @7)", nome, sexo, dataNascimento, dataMatricula, observacoes, idTurma, idSala, cpfResponsavel);
-
-        dbV.Close();
-
-        <h1 class="text-success">Matrícula realizada com sucesso!</h1>
-        <hr />
-        <a href="~/Index.cshtml" class="btn btn-success">Voltar</a>
-    }
-}
-
-
 <h3 class="text-primary">Matrícula da Criança</h3>
 <hr />
-<h4>Dados do Responsável</h4>
+<h4>Buscar Responsável</h4>
 <hr />
+
+
+<form method="post" action="~/Views/Responsavel/PesquisaResponsavel.cshtml">
 <div class="row">
-    <div class="col-md-6">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th> CPF </th>
-                        <th> Nome </th>
-                        <th> Data de Nascimento </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                            <td>@r.cpf</td>
-                            <td>@r.nome</td>
-                            <td>@r.dataNascimento</td>
-                        </tr>
-                </tbody>
-            </table>
-        </div>
+    <br />
+        <div class="form-group">
+            <label for="txtBuscarCpfReso"> Informe o CPF do Responsável:</label>
+            <div class="row">
+                <div class="col-md-2">
+                    <input type="text" name="txtCpfBusca" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-success"> Buscar </button> 
+                </div>
+            </div>
     </div>
 </div>
+</form>
+<br />
 <hr />
 <!--Dados da Crianca-->
 <form method="post" action="">
+    <br />
     <h4 class="text-info">Dados da Criança</h4>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label for="textCpf"></label>
-                <input type="hidden" name="textCpf" value="@idResp" class="form-control" />
+                <input type="hidden" name="textCpf" value="" class="form-control" />
             </div>
         </div>
     </div>
@@ -159,11 +112,3 @@
     </div>
     <a href="~/Index.cshtml" class="btn btn-danger">Cancelar</a> | <button type="submit" class="btn btn-primary">Cadastrar</button>
 </form>
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('#dtNasc').mask("00/00/0000");
-        });
-
-    </script>
-}
