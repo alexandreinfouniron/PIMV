@@ -1,25 +1,15 @@
-﻿@{
+﻿
+@{
     Validation.RequireField("textNome", "CAMPO OBRIGATÓRIO!");
     Validation.RequireField("dtNascimento", "CAMPO OBRIGATÓRIO!");
     Validation.RequireField("opRadio", "CAMPO OBRIGATÓRIO!");
     Validation.RequireField("sSala", "CAMPO OBRIGATÓRIO!");
     Validation.RequireField("sTurma", "CAMPO OBRIGATÓRIO!");
-
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!--Conexao com banco-->
 @{
     var db = WebMatrix.Data.Database.Open("dbBancoPIM");
-
-    var idResp = Request.QueryString["cpf"];
-    if (idResp == null)
-    {
-
-    }
-
-    var r = db.QuerySingle("SELECT*FROM Responsavel WHERE cpf = @0", idResp);
-
 
 
     var sala = db.Query("SELECT*FROM Sala");
@@ -29,6 +19,7 @@
 }
 
 @{
+    var cpfquery = Request.QueryString["id2"];
     if (IsPost && Validation.IsValid())
     {
         var dbV = WebMatrix.Data.Database.Open("dbBancoPIM");
@@ -42,58 +33,25 @@
         string observacoes = Request.Form["taObs"];
         decimal idTurma = Request.Form["sTurma"].AsDecimal();
         decimal idSala = Request.Form["sSala"].AsDecimal();
+        
 
         dbV.Execute("INSERT INTO Crianca (nome, sexo, dtNascimento, dtMatricula, observacoes, idTurma, idSala, cpfResponsavel) VALUES(@0, @1, @2, @3, @4, @5, @6, @7)", nome, sexo, dataNascimento, dataMatricula, observacoes, idTurma, idSala, cpfResponsavel);
 
         dbV.Close();
-
-        <h1 class="text-success">Matrícula realizada com sucesso!</h1>
-        <hr />
-        <a href="~/Index.cshtml" class="btn btn-success">Voltar</a>
     }
 }
 
 
 <h3 class="text-primary">Matrícula da Criança</h3>
-<hr />
-<h4>Dados do Responsável</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th> CPF </th>
-                        <th> Nome </th>
-                        <th> Data de Nascimento </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                            <td>@r.cpf</td>
-                            <td>@r.nome</td>
-                            <td>@r.dataNascimento</td>
-                        </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<hr />
+
 <!--Dados da Crianca-->
 <form method="post" action="">
     <h4 class="text-info">Dados da Criança</h4>
     <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="textCpf"></label>
-                <input type="hidden" name="textCpf" value="@idResp" class="form-control" />
-            </div>
-        </div>
     </div>
+    <input type="text" value="@cpfquery" />
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="form-group">
                 <label for="textNome">Nome: </label>
                 <input type="text" name="textNome" id="nome" placeholder="Nome" class="form-control" />
@@ -102,14 +60,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="dtNascimento">Data de Nascimento:</label>
                 <input type="text" name="dtNascimento" id="dtNasc" placeholder="00/00/0000" class="form-control" />
                 @Html.ValidationMessage("dtNascimento")
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="rSexo">Sexo:</label>
                 <p></p>
@@ -124,7 +82,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="sala">Sala:</label>
                 <select name="sSala" class="form-control">
@@ -136,7 +94,7 @@
                 @Html.ValidationMessage("sSala")
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="turma">Turma:</label>
                 <select name="sTurma" class="form-control">
@@ -150,7 +108,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="form-group">
                 <label for="taObs">Observações:</label>
                 <textarea name="taObs" class="form-control"></textarea>
