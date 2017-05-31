@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var db = WebMatrix.Data.Database.Open("dbBancoPIM");
+
+    if (IsPost)
+    {
+        string cpf = Request.Form["textCpf"];
+    }
+
+    var idResp = Request.QueryString["cpf"];
+
+    if (idResp == null)
+    {
+    }
+
+    var r = db.QuerySingle("SELECT*FROM Responsavel WHERE cpf = @0", idResp);
+
+    db.Close();
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>CPF</th>
+            <th>Nome</th>
+            <th>Sexo</th>
+            <th>Telefone</th>
+            <th class="text-center">Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@r.cpf</td>
+            <td>@r.nome</td>
+            <td>@r.sexo</td>
+            <td>@r.telefone1</td>
+            <td class="text-center">
+                <button type="button" class="btn btn-sm btn-success"><span class="glyphicon glyphicon glyphicon-plus"></span> Adicionar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
