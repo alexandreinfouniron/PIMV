@@ -8,7 +8,7 @@
         var db = WebMatrix.Data.Database.Open("dbBancoPIM");
         <!--Dados da Criança-->
         string idMatricula = Request.Form["textMatricula"];
-        string cpfResponsavel = Request.Form["textCpf"];
+        string cpfResponsavel = Request.Form["textCpfResp"];
         string nome = Request.Form["textNomeCrianca"];
         DateTime dtNascimento = Request.Form["dtNascimento"].AsDateTime();
         DateTime dataMatricula = DateTime.Today;
