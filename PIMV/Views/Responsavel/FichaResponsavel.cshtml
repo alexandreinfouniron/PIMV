@@ -1,0 +1,127 @@
+﻿<!--Conexao com banco-->
+@{
+    var db = WebMatrix.Data.Database.Open("dbBancoPIM");
+
+    var idResponsavel = Request.QueryString["cpf"];
+    bool fichaVal = Request.QueryString["fichaVal"].AsBool();
+    if (idResponsavel == null)
+    {
+        Response.Redirect("~/Index.cshtml");
+    }
+
+    var r = db.QuerySingle(@"select r.cpf 'cpf', r.nome 'nomeResp', r.dataNascimento 'dtNasc', r.sexo 'sexo', r.endereco 'end', r.telefone1 'telResp1', r.telefone2 'telResp2', r.email 'emailResp' FROM Responsavel r", idResponsavel);
+
+    db.Close();
+
+    }
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title text-info text-center" id="myModalLabel">Ficha do Responsável</h4>
+</div>
+<p></p>
+
+<!--Dados do Responsável-->
+<form method="post" action="">
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="texCpf">CPF: </label>
+                <input type="text" id="cpf" name="textCpf" value="@r.cpf" class="form-control" />           
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="textNome">Nome: </label>
+                <input type="text" name="textNome" value="@r.nomeResp" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="dtNascimento">Data de Nascimento:</label>
+                @{
+                    DateTime dataNascimento = r.dtNasc;
+                }
+                <input type="text" name="dtNascimento" value="@dataNascimento.ToString("yyyy-MM-dd")" class="form-control" />
+            </div>
+        </div>
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="rSexo">Sexo:</label>
+                <p></p>
+                <p></p>
+                @if (r.sexo == "M")
+                {
+                    <label class="radio-inline"><input type="radio" value="M" name="opSexo" checked>Masculino</label>
+                    <label class="radio-inline"><input type="radio" value="F" name="opSexo">Feminino</label>
+                }
+                else
+                {
+                    <label class="radio-inline"><input type="radio" value="M" name="opSexo">Masculino</label>
+                    <label class="radio-inline"><input type="radio" value="F" name="opSexo" checked>Feminino</label>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="textEndereco">Endereço: </label>
+                <input type="text" name="textEndereco" value="@r.end" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="Tel1">Telefone 1: </label>
+                <input type="tel" name="tel1" value="@r.telResp1" id="tel1" class="form-control" />
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="tel2">Telefone 2: </label>
+                <input type="tel" name="tel2" value="@r.telResp2" id="tel2" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="email">Email: </label>
+                <input type="email" value="@r.emailResp" name="email" class="form-control" />
+            </div>
+        </div>
+    </div>
+   
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"> Sair</button>
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon glyphicon-edit"></span> Editar</button>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#cpf').mask("000.000.000-00");
+            $('#dtNasc').mask("00/00/0000");
+            $('#tel1').mask("(00)00000-0000");
+            $('#tel2').mask("(00)00000-0000");
+        });
+
+    </script>
+}

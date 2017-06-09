@@ -1,0 +1,13 @@
+﻿
+@{ 
+
+    var db = WebMatrix.Data.Database.Open("dbBancoPIM");
+
+    string cpf = Request.Form["textCpf"];
+
+    db.Execute("DELETE FROM Responsavel WHERE cpf=@0", cpf);
+
+    db.Close();
+
+    Response.Redirect("~/Views/Responsavel/PesquisaResponsavel.cshtml");
+}

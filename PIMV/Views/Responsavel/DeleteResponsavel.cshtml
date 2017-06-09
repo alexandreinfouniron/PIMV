@@ -1,0 +1,12 @@
+﻿<!--Conexao com banco-->
+@{
+    string cpf = Request.QueryString["cpf"];
+}
+
+<form method="post" action="~/DAL/ResponsavelDAL/DeleteResponsavelDAL.cshtml">
+    <input type="hidden" value="@cpf" name="textCpf" />
+    <h4>Deseja realmente excluir?</h4>
+    <p></p><br />
+    <button type="button" class="btn btn-lg btn-success" data-dismiss="modal"> Não</button> | <input type="submit" class="btn btn-lg btn-danger" value=" Sim" />
+
+</form>
