@@ -3,47 +3,28 @@
 }
 @{
     var db = WebMatrix.Data.Database.Open("dbBancoPIM");
-    var crianca = db.Query(@"select c.idMatricula 'Matricula', c.dtNascimento 'dtNasc' , c.dtMatricula 'dtMatricula', r.nome 'nomeResp', c.nome 'nomeCrianca', s.nome 'nomeSala', t.periodo 'nomePeriodo', c.sexo 'sexo', c.Observacoes 'obs'
-                             from Crianca c left join Responsavel r
-                             on c.cpfResponsavel = r.cpf left join Sala s
-                             on c.idSala = s.idSala left join Turma t
-                             on c.idTurma = t.idTurma");
+    var crianca = db.Query(@"SELECT c.idMatricula 'Matricula', c.dtNascimento 'dtNasc' , c.dtMatricula 'dtMatricula', r.nome 'nomeResp', c.nome 'nomeCrianca', s.nome 'nomeSala', t.periodo 'nomePeriodo', c.sexo 'sexo', c.Observacoes 'obs'
+                             FROM Crianca c LEFT JOIN Responsavel r
+                             ON c.cpfResponsavel = r.cpf LEFT JOIN Sala s
+                             ON c.idSala = s.idSala LEFT JOIN Turma t
+                             ON c.idTurma = t.idTurma");
     db.Close();
 
     bool buscando = false;
 
-   
-
-    
-
-        <!--Dados da Criança-->
-        //if (IsPost)
-        //{
-        //    var db2 = WebMatrix.Data.Database.Open("dbBancoPIM");
-        //    var texto = Request.Form["txtBuscar"];
-
-        //    var dados = db2.Query(@"select c.idMatricula 'Matricula', c.dtNascimento 'dtNasc' , c.dtMatricula 'dtMatricula', r.nome 'nomeResp', c.nome 'nomeCrianca', s.nome 'nomeSala', t.periodo 'nomePeriodo', c.sexo 'sexo', c.Observacoes 'obs'
-        //                         from Crianca c left join Responsavel r
-        //                         on c.cpfResponsavel = r.cpf left join Sala s
-        //                         on c.idSala = s.idSala left join Turma t
-        //                         on c.idTurma = t.idTurma WHERE nome LIKE @0", "%" + texto + "%");
-
-        //    db2.Close();
-
-        //    buscando = true;
-    }
+}
 
 
-<h3 class="text-center">Crianças Cadastradas</h3>
+<h3 class="text-center"> Crianças Cadastradas </h3>
 <p></p><br />
 <form method="post" action="">
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-9">
-            <input type="text" name="txtBuscar" class="form-control" placeholder="Pesquisar" />
+            <input type="text" name="txtBuscar" class="form-control" placeholder="Pesquisar..." />
         </div>
         <div class="col-md-2">
-            <input type="submit" class="btn btn-primary" />
+            <input type="submit" class="btn btn-primary" value="Buscar" />
         </div>
     </div>
     <p></p><br />
@@ -147,7 +128,7 @@
                 $("#conteudoModal").load("/Views/Crianca/DeleteCrianca.cshtml?matricula=" + id,
                     function () {
                         $('#myModal').modal('show')
-                    });
+                });
             });
         });
     </script>
