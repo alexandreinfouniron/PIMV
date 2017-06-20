@@ -9,7 +9,7 @@
     var db = WebMatrix.Data.Database.Open("dbBancoPIM");
 
     var idResp = Request.QueryString["cpf"];
-    bool fichaVal = Request.QueryString["fichaVal"].AsBool();
+    //bool fichaVal = Request.QueryString["fichaVal"].AsBool();
     if (idResp == null)
     {
         Response.Redirect("~/Index.cshtml");
@@ -52,10 +52,8 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="dtNascimento">Data de Nascimento: </label>
-                @{
-                    DateTime dataNascimento = r.dtNascResp;
-                }
-                <input type="text" id="dtNasc" value="@r.dataNascimento" name="dtNascimento" class="form-control" />
+
+                <input type="text" id="dtNasc" value="@r.dtNascResp.ToString("dd/MM/yyyy")" name="dtNascimento" class="form-control" />
                 @Html.ValidationMessage("dtNascimento")
                 
             </div>
@@ -136,3 +134,4 @@
         });
 
     </script>
+    }
